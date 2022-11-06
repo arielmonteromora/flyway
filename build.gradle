@@ -1,0 +1,40 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.5'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'java'
+	id "org.flywaydb.flyway" version "6.4.4"
+}
+
+group = 'com.example.flywaymigration'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+}
+
+flyway {
+	url = "jdbc:postgresql://localhost:5432/personal"
+	user = ''
+	password = ''
+	schemas = ['public']
+	table = 'schema_version'
+	outOfOrder = true
+	ignoreMissingMigrations = true
+	baselineOnMigrate = true
+}
+
+
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	runtimeOnly 'org.postgresql:postgresql'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.flywaydb:flyway-core'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+flywayMigrate.runTask()
